@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPIRE PROPERTY LOAN ELIGIBILITY</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;color:#20232a;font-family:Arial,sans-serif}
+header{background:#15171c;color:white;padding:28px 18px;border-bottom:5px solid #c62835}
+header h1{margin:12px 0 5px;font-size:25px}
+header p{color:#ccc;font-size:12px}
+main{max-width:1000px;margin:25px auto;padding:0 15px}
+.card{background:white;padding:20px;border-radius:13px;margin-bottom:16px;border:1px solid #e2e4e8}
+h2{font-size:18px;margin-top:0}
+h3{font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+label{display:block;font-size:12px;font-weight:bold;margin-bottom:5px}
+input,select{width:100%;padding:11px;border:1px solid #d5d8de;border-radius:8px;font-size:14px}
+button{background:#bd2634;color:white;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+.result{background:#f5f6f8;padding:13px;border-radius:9px;margin:8px 0}
+.result strong{display:block;font-size:21px;margin-top:4px}
+.note{font-size:11px;color:#666;line-height:1.5}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div><b>MPIRE PROPERTIES</b></div>
+<h1>PROPERTY LOAN ELIGIBILITY</h1>
+<p>TRUST • VALUE • RESULTS | FINANCING ANALYSIS SYSTEM</p>
+</header>
+<main>
+<div class="card">
+<h2>01. CUSTOMER PROFILE</h2>
+<div class="grid">
+<div><label>Nama pelanggan</label><input id="name" placeholder="Nama penuh"></div>
+<div><label>Jenis pekerjaan</label>
+<select id="job">
+<option>Gaji bulanan</option>
+<option>Komisen / REN</option>
+<option>Bekerja sendiri</option>
+<option>Pendapatan campuran</option>
+</select></div>
+<div><label>Pendapatan tetap bulanan (RM)</label><input id="fixed" type="number" value="0"></div>
+<div><label>Pendapatan berubah / komisen (RM)</label><input id="variable" type="number" value="0"></div>
+<div><label>Pengiktirafan pendapatan tetap (%)</label><input id="fixedPct" type="number" value="100"></div>
+<div><label>Pengiktirafan pendapatan berubah (%)</label><input id="variablePct" type="number" value="70"></div>
+</div>
+<p class="note">Peratus pengiktirafan ialah andaian simulasi. Ubah mengikut kaedah bank yang disahkan.</p>
+</div>
+
+<div class="card">
+<h2>02. EXISTING COMMITMENTS</h2>
+<div class="grid">
+<div><label>Pinjaman rumah (RM)</label><input id="homeDebt" type="number" value="0"></div>
+<div><label>Pinjaman kereta (RM)</label><input id="carDebt" type="number" value="0"></div>
+<div><label>Personal loan (RM)</label><input id="personalDebt" type="number" value="0"></div>
+<div><label>Kad kredit (RM)</label><input id="cardDebt" type="number" value="0"></div>
+<div><label>PTPTN (RM)</label><input id="ptptn" type="number" value="0"></div>
+<div><label>Komitmen lain (RM)</label><input id="otherDebt" type="number" value="0"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>03. PROPERTY FINANCING</h2>
+<div class="grid">
+<div><label>Jenis pembiayaan</label>
+<select id="type" onchange="updateType()">
+<option value="purchase">Pembelian hartanah</option>
+<option value="refinance">Refinance hartanah</option>
+</select></div>
+<div><label>Nilai hartanah (RM)</label><input id="propertyValue" type="number" value="400000"></div>
+<div><label>Margin pembiayaan (%)</label><input id="margin" type="number" value="90"></div>
+<div><label>Kadar faedah / keuntungan (%)</label><input id="rate" type="number" step="0.01" value="4.2"></div>
+<div><label>Tempoh pembiayaan (tahun)</label><input id="years" type="number" value="35"></div>
+<div><label>Umur pelanggan</label><input id="age" type="number" value="35"></div>
+<div id="balanceField" style="display:none"><label>Baki pinjaman sedia ada (RM)</label><input id="balance" type="number" value="0"></div>
+<div id="costField" style="display:none"><label>Anggaran kos refinance (RM)</label><input id="cost" type="number" value="15000"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>04. BANK ANALYSIS SETTINGS</h2>
+<div class="grid">
+<div><label>Had DSR sasaran (%)</label><input id="dsr" type="number" value="70"></div>
+<div><label>Had umur tamat pembiayaan</label><input id="endAge" type="number" value="70"></div>
+</div>
+<p class="note">Had DSR dan umur maksimum perlu disesuaikan mengikut bank dan profil pemohon.</p>
+<button onclick="calculate()">CALCULATE ELIGIBILITY</button>
+</div>
+
+<div class="card">
+<h2>05. ANALYSIS RESULTS</h2>
+<div class="result">Pendapatan diiktiraf<strong id="incomeResult">RM0</strong></div>
+<div class="result">Komitmen sedia ada<strong id="commitResult">RM0</strong></div>
+<div class="result">DSR semasa<strong id="currentDSR">0%</strong></div>
+<div class="result">Baki kemampuan ansuran<strong id="capacity">RM0</strong></div>
+<div class="result">Anggaran jumlah pembiayaan<strong id="loanResult">RM0</strong></div>
+<div class="result">Anggaran ansuran bulanan<strong id="paymentResult">RM0</strong></div>
+<div class="result">DSR selepas pembiayaan<strong id="newDSR">0%</strong></div>
+<div class="result">Anggaran maksimum pembiayaan<strong id="maxLoan">RM0</strong></div>
+<div class="result">Anggaran harga hartanah maksimum<strong id="maxPrice">RM0</strong></div>
+<div class="result" id="status">Masukkan maklumat pelanggan.</div>
+<p class="note" id="extra"></p>
+</div>
+
+<div class="card">
+<h2>06. BANK COMPARISON</h2>
+<p class="note">Masukkan parameter yang telah disahkan daripada bank. Jangan anggap angka ini sebagai polisi rasmi bank.</p>
+<div class="grid">
+<div><label>Pilih bank</label>
+<select id="bank">
+<option>Maybank</option><option>CIMB Bank</option>
+<option>Public Bank</option><option>RHB Bank</option>
+<option>Hong Leong Bank</option><option>AmBank</option>
+<option>Bank Islam</option><option>Bank Rakyat</option>
+<option>BSN</option><option>MBSB Bank</option>
+</select></div>
+<div><label>Had DSR bank (%)</label><input id="bankDSR" type="number" value="70"></div>
+<div><label>Pengiktirafan pendapatan (%)</label><input id="bankIncome" type="number" value="100"></div>
+<div><label>Kadar bank (%)</label><input id="bankRate" type="number" step="0.01" value="4.2"></div>
+</div>
+<button onclick="compareBank()">ANALYSE BANK</button>
+<div id="bankResult" class="result">Belum dianalisis.</div>
+</div>
+
+<div class="card">
+<h2>07. CUSTOMER REPORT</h2>
+<button onclick="window.print()">PRINT / SAVE PDF</button>
+<p class="note">Analisis ini merupakan anggaran awal sahaja dan bukan jaminan kelulusan pinjaman.</p>
+</div>
+</main>
+
+<script>
+const n=id=>Math.max(0,Number(document.getElementById(id).value)||0);
+const rm=x=>'RM'+Math.round(x).toLocaleString('en-MY');
+function pmt(p,r,y){
+ if(!p||!y)return 0;
+ let m=r/1200,k=y*12;
+ return m===0?p/k:p*m/(1-Math.pow(1+m,-k));
+}
+function maxPmt(a,r,y){
+ if(!a||!y)return 0;
+ let m=r/1200,k=y*12;
+ return m===0?a*k:a*(1-Math.pow(1+m,-k))/m;
+}
+function updateType(){
+ let ref=document.getElementById('type').value==='refinance';
+ document.getElementById('balanceField').style.display=ref?'block':'none';
+ document.getElementById('costField').style.display=ref?'block':'none';
+}
+function calculate(){
+ let income=n('fixed')*n('fixedPct')/100+
+ n('variable')*n('variablePct')/100;
+ let commit=n('homeDebt')+n('carDebt')+n('personalDebt')+
+ n('cardDebt')+n('ptptn')+n('otherDebt');
+ let dsr=n('dsr'),capacity=Math.max(0,income*dsr/100-commit);
+ let years=Math.min(n('years'),Math.max(0,n('endAge')-n('age')));
+ let value=n('propertyValue'),margin=n('margin');
+ let loan=value*margin/100;
+ let rate=n('rate');
+ let payment=pmt(loan,rate,years);
+ let maxLoan=maxPmt(capacity,rate,years);
+ let maxPrice=margin?maxLoan/(margin/100):0;
+ let after=income?(commit+payment)/income*100:0;
+ let ref=document.getElementById('type').value==='refinance';
+ let cash=loan-n('balance')-n('cost');
+ document.getElementById('incomeResult').textContent=rm(income);
+ document.getElementById('commitResult').textContent=rm(commit);
+ document.getElementById('currentDSR').textContent=(income?commit/income*100:0).toFixed(1)+'%';
+ document.getElementById('capacity').textContent=rm(capacity);
+ document.getElementById('loanResult').textContent=rm(loan);
+ document.getElementById('paymentResult').textContent=rm(payment);
+ document.getElementById('newDSR').textContent=after.toFixed(1)+'%';
+ document.getElementById('maxLoan').textContent=rm(maxLoan);
+ document.getElementById('maxPrice').textContent=rm(maxPrice);
+ document.getElementById('status').textContent=income?(payment<=capacity?'ANSURAN DALAM HAD SIMULASI DSR':'ANSURAN MELEBIHI HAD SIMULASI DSR'):'SILA MASUKKAN PENDAPATAN';
+ document.getElementById('extra').textContent=ref?
+ 'Anggaran tunai kasar refinance selepas baki pinjaman dan kos: '+rm(cash):
+ 'Anggaran deposit: '+rm(value-loan);
+}
+function compareBank(){
+ let income=n('fixed')*n('fixedPct')/100+
+ n('variable')*n('variablePct')/100;
+ let commit=n('homeDebt')+n('carDebt')+n('personalDebt')+
+ n('cardDebt')+n('ptptn')+n('otherDebt');
+ let bankIncome=income*n('bankIncome')/100;
+ let capacity=Math.max(0,bankIncome*n('bankDSR')/100-commit);
+ let years=Math.min(n('years'),Math.max(0,n('endAge')-n('age')));
+ let max=maxPmt(capacity,n('bankRate'),years);
+ let margin=n('margin');
+ let maxPrice=margin?max/(margin/100):0;
+ document.getElementById('bankResult').innerHTML=
+ '<b>'+document.getElementById('bank').value+'</b><br>'+
+ 'Pendapatan diiktiraf: '+rm(bankIncome)+'<br>'+
+ 'Baki ansuran: '+rm(capacity)+'<br>'+
+ 'Maksimum pembiayaan anggaran: '+rm(max)+'<br>'+
+ 'Anggaran harga hartanah: '+rm(maxPrice);
+}
+</script>
+</body>
+</html>
