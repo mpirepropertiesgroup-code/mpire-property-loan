@@ -5,200 +5,381 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MPIRE PROPERTY LOAN ELIGIBILITY</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 <style>
+:root{--red:#c62828;--dark:#171717;--silver:#e8e8e8}
 *{box-sizing:border-box}
-body{margin:0;background:#f3f4f6;color:#20232a;font-family:Arial,sans-serif}
-header{background:#15171c;color:white;padding:28px 18px;border-bottom:5px solid #c62835}
-header h1{margin:12px 0 5px;font-size:25px}
-header p{color:#ccc;font-size:12px}
-main{max-width:1000px;margin:25px auto;padding:0 15px}
-.card{background:white;padding:20px;border-radius:13px;margin-bottom:16px;border:1px solid #e2e4e8}
-h2{font-size:18px;margin-top:0}
-h3{font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-label{display:block;font-size:12px;font-weight:bold;margin-bottom:5px}
-input,select{width:100%;padding:11px;border:1px solid #d5d8de;border-radius:8px;font-size:14px}
-button{background:#bd2634;color:white;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
-.result{background:#f5f6f8;padding:13px;border-radius:9px;margin:8px 0}
-.result strong{display:block;font-size:21px;margin-top:4px}
-.note{font-size:11px;color:#666;line-height:1.5}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
+body{margin:0;background:#f3f4f6;font-family:Arial,sans-serif;color:#222}
+header{background:#171717;color:white;padding:25px 18px;text-align:center;border-bottom:5px solid var(--red)}
+header h1{font-size:23px;margin:0 0 8px}
+header p{margin:0;color:#ccc;font-size:12px;letter-spacing:2px}
+main{max-width:1050px;margin:20px auto;padding:0 14px}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:16px;box-shadow:0 2px 10px #0000000d}
+h2{font-size:18px;margin:0 0 15px;border-left:4px solid var(--red);padding-left:10px}
+h3{font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{font-size:13px;font-weight:bold;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:7px;font-size:14px;background:white}
+input[type=file]{padding:9px;background:#fafafa}
+small,.hint{font-size:12px;color:#666;line-height:1.5}
+button{border:0;border-radius:7px;padding:12px 17px;background:var(--red);color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#333}
+button.light{background:#eee;color:#222}
+button:disabled{opacity:.5;cursor:wait}
+.uploadbox{border:2px dashed #bbb;border-radius:10px;padding:16px;margin:12px 0;background:#fafafa}
+.fileitem{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:9px 0;font-size:13px}
+.fileitem button{padding:6px 9px;font-size:11px}
+.progress{height:9px;background:#eee;border-radius:20px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:var(--red);width:0%;transition:width .2s}
+.result{background:#f8f8f8;border-radius:8px;padding:14px;margin-top:12px}
+.result strong{font-size:20px;color:var(--red)}
+.status{font-size:12px;color:#555;margin-top:8px}
+textarea{min-height:140px;line-height:1.5}
+.warning{background:#fff4df;border-left:4px solid #d18b00;padding:12px;border-radius:6px;font-size:12px;line-height:1.6}
+.stat{background:#f5f5f5;border-radius:8px;padding:14px}
+.stat span{display:block;font-size:12px;color:#666;margin-bottom:7px}
+.stat strong{font-size:21px}
+footer{text-align:center;color:#777;font-size:11px;padding:20px}
+@media print{button,.uploadbox{display:none!important}body{background:white}.card{box-shadow:none;border:1px solid #ddd}}
 </style>
 </head>
+
 <body>
 <header>
-<div><b>MPIRE PROPERTIES</b></div>
-<h1>PROPERTY LOAN ELIGIBILITY</h1>
-<p>TRUST • VALUE • RESULTS | FINANCING ANALYSIS SYSTEM</p>
+<h1>MPIRE PROPERTY LOAN ELIGIBILITY</h1>
+<p>MPIRE PROPERTIES | TRUST • VALUE • RESULTS</p>
 </header>
+
 <main>
+
 <div class="card">
-<h2>01. CUSTOMER PROFILE</h2>
+<h2>01. Customer Profile</h2>
 <div class="grid">
-<div><label>Nama pelanggan</label><input id="name" placeholder="Nama penuh"></div>
+<div><label>Nama pelanggan</label><input id="customer" placeholder="Nama penuh"></div>
 <div><label>Jenis pekerjaan</label>
-<select id="job">
-<option>Gaji bulanan</option>
-<option>Komisen / REN</option>
-<option>Bekerja sendiri</option>
-<option>Pendapatan campuran</option>
+<select id="employment">
+<option>Gaji bulanan</option><option>Komisen / REN</option>
+<option>Bekerja sendiri</option><option>Pendapatan campuran</option>
 </select></div>
-<div><label>Pendapatan tetap bulanan (RM)</label><input id="fixed" type="number" value="0"></div>
-<div><label>Pendapatan berubah / komisen (RM)</label><input id="variable" type="number" value="0"></div>
+<div><label>Umur</label><input id="age" type="number" value="35"></div>
+<div><label>Tempoh pembiayaan (tahun)</label><input id="tenure" type="number" value="30"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>02. Document Upload & Auto OCR</h2>
+<div class="warning">
+Dokumen diproses dalam browser pada peranti ini. Fail tidak dihantar ke server atau disimpan dalam sistem. Gunakan peranti yang selamat. Pemprosesan OCR memerlukan sambungan internet untuk memuatkan enjin OCR daripada CDN. Jangan upload dokumen pelanggan ke repository GitHub.
+</div>
+
+<div class="uploadbox">
+<h3>Slip Gaji</h3>
+<label>Pilih satu atau beberapa slip gaji (PDF/JPG/PNG)</label>
+<input type="file" id="payslips" accept=".pdf,.png,.jpg,.jpeg" multiple>
+<div id="paylist"></div>
+</div>
+
+<div class="uploadbox">
+<h3>Bank Statement</h3>
+<label>Pilih penyata bank (PDF/JPG/PNG)</label>
+<input type="file" id="statements" accept=".pdf,.png,.jpg,.jpeg" multiple>
+<div id="banklist"></div>
+</div>
+
+<button id="scanBtn" onclick="scanDocuments()">MULA AUTO OCR & ANALISIS</button>
+<div class="progress"><div id="progressbar"></div></div>
+<div id="progressText" class="status">Menunggu dokumen.</div>
+
+<h3>Hasil bacaan dokumen</h3>
+<div class="hint">Sistem akan mencadangkan nilai berdasarkan teks yang dibaca. Semua angka mesti disemak dengan dokumen asal.</div>
+<div class="grid" style="margin-top:12px">
+<div><label>Gaji asas / pendapatan tetap (RM)</label><input id="fixedIncome" type="number" value="0"></div>
+<div><label>Elaun / komisen / pendapatan berubah (RM)</label><input id="variableIncome" type="number" value="0"></div>
+<div><label>Potongan gaji (RM)</label><input id="deductions" type="number" value="0"></div>
+<div><label>Anggaran pendapatan bersih (RM)</label><input id="netIncome" type="number" value="0"></div>
+</div>
+
+<h3>Teks OCR untuk semakan</h3>
+<textarea id="ocrText" placeholder="Teks yang dibaca daripada dokumen akan dipaparkan di sini..."></textarea>
+<div class="status" id="ocrStatus">Belum ada analisis.</div>
+</div>
+
+<div class="card">
+<h2>03. Existing Financial Commitments</h2>
+<div class="grid">
+<div><label>Ansuran rumah sedia ada (RM)</label><input id="home" type="number" value="0"></div>
+<div><label>Ansuran kereta (RM)</label><input id="car" type="number" value="0"></div>
+<div><label>Pinjaman peribadi (RM)</label><input id="personal" type="number" value="0"></div>
+<div><label>Kad kredit - komitmen bulanan (RM)</label><input id="card" type="number" value="0"></div>
+<div><label>PTPTN (RM)</label><input id="ptptn" type="number" value="0"></div>
+<div><label>Komitmen lain (RM)</label><input id="other" type="number" value="0"></div>
+</div>
+<p class="hint">Semak komitmen dengan dokumen sokongan dan rekod kredit. OCR tidak boleh mengesahkan sesuatu transaksi sebagai hutang secara automatik.</p>
+</div>
+
+<div class="card">
+<h2>04. Property Financing</h2>
+<div class="grid">
+<div><label>Jenis permohonan</label>
+<select id="loanType"><option>Pembelian rumah</option><option>Refinance</option></select></div>
+<div><label>Harga / nilai hartanah (RM)</label><input id="propertyValue" type="number" value="400000"></div>
+<div><label>Margin pembiayaan (%)</label><input id="margin" type="number" value="90"></div>
+<div><label>Kadar keuntungan / faedah (%)</label><input id="rate" type="number" step=".01" value="4.2"></div>
+<div><label>Baki pinjaman refinance (RM)</label><input id="balance" type="number" value="0"></div>
+<div><label>Kos refinance / lain-lain (RM)</label><input id="cost" type="number" value="0"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>05. Bank Analysis Assumptions</h2>
+<div class="grid">
 <div><label>Pengiktirafan pendapatan tetap (%)</label><input id="fixedPct" type="number" value="100"></div>
 <div><label>Pengiktirafan pendapatan berubah (%)</label><input id="variablePct" type="number" value="70"></div>
+<div><label>Target DSR (%)</label><input id="dsr" type="number" value="70"></div>
+<div><label>Umur maksimum pembiayaan</label><input id="endAge" type="number" value="70"></div>
 </div>
-<p class="note">Peratus pengiktirafan ialah andaian simulasi. Ubah mengikut kaedah bank yang disahkan.</p>
-</div>
-
-<div class="card">
-<h2>02. EXISTING COMMITMENTS</h2>
-<div class="grid">
-<div><label>Pinjaman rumah (RM)</label><input id="homeDebt" type="number" value="0"></div>
-<div><label>Pinjaman kereta (RM)</label><input id="carDebt" type="number" value="0"></div>
-<div><label>Personal loan (RM)</label><input id="personalDebt" type="number" value="0"></div>
-<div><label>Kad kredit (RM)</label><input id="cardDebt" type="number" value="0"></div>
-<div><label>PTPTN (RM)</label><input id="ptptn" type="number" value="0"></div>
-<div><label>Komitmen lain (RM)</label><input id="otherDebt" type="number" value="0"></div>
-</div>
+<p class="hint">Peratusan ini ialah andaian simulasi. Polisi sebenar berbeza mengikut bank, produk dan profil pelanggan.</p>
 </div>
 
 <div class="card">
-<h2>03. PROPERTY FINANCING</h2>
-<div class="grid">
-<div><label>Jenis pembiayaan</label>
-<select id="type" onchange="updateType()">
-<option value="purchase">Pembelian hartanah</option>
-<option value="refinance">Refinance hartanah</option>
-</select></div>
-<div><label>Nilai hartanah (RM)</label><input id="propertyValue" type="number" value="400000"></div>
-<div><label>Margin pembiayaan (%)</label><input id="margin" type="number" value="90"></div>
-<div><label>Kadar faedah / keuntungan (%)</label><input id="rate" type="number" step="0.01" value="4.2"></div>
-<div><label>Tempoh pembiayaan (tahun)</label><input id="years" type="number" value="35"></div>
-<div><label>Umur pelanggan</label><input id="age" type="number" value="35"></div>
-<div id="balanceField" style="display:none"><label>Baki pinjaman sedia ada (RM)</label><input id="balance" type="number" value="0"></div>
-<div id="costField" style="display:none"><label>Anggaran kos refinance (RM)</label><input id="cost" type="number" value="15000"></div>
+<h2>06. Eligibility Results</h2>
+<button onclick="calculate()">KIRA KELAYAKAN PEMBIAYAAN</button>
+<div class="grid" style="margin-top:15px">
+<div class="stat"><span>Pendapatan diiktiraf</span><strong id="rIncome">RM0</strong></div>
+<div class="stat"><span>Jumlah komitmen sedia ada</span><strong id="rCommit">RM0</strong></div>
+<div class="stat"><span>DSR semasa</span><strong id="rDSR">0%</strong></div>
+<div class="stat"><span>Kapasiti ansuran baharu</span><strong id="rCapacity">RM0</strong></div>
+<div class="stat"><span>Anggaran pembiayaan</span><strong id="rFinance">RM0</strong></div>
+<div class="stat"><span>Anggaran ansuran bulanan</span><strong id="rInstallment">RM0</strong></div>
+<div class="stat"><span>DSR selepas pembiayaan</span><strong id="rPostDSR">0%</strong></div>
+<div class="stat"><span>Anggaran harga hartanah maksimum</span><strong id="rMaxPrice">RM0</strong></div>
 </div>
+<div id="resultNote" class="result">Masukkan maklumat dan tekan butang kira.</div>
 </div>
 
 <div class="card">
-<h2>04. BANK ANALYSIS SETTINGS</h2>
-<div class="grid">
-<div><label>Had DSR sasaran (%)</label><input id="dsr" type="number" value="70"></div>
-<div><label>Had umur tamat pembiayaan</label><input id="endAge" type="number" value="70"></div>
-</div>
-<p class="note">Had DSR dan umur maksimum perlu disesuaikan mengikut bank dan profil pemohon.</p>
-<button onclick="calculate()">CALCULATE ELIGIBILITY</button>
+<h2>07. Report</h2>
+<p class="hint">Laporan ini ialah simulasi awal dan bukan kelulusan bank.</p>
+<button class="secondary" onclick="window.print()">PRINT / SAVE PDF</button>
+<button class="light" onclick="clearAll()">RESET FORM</button>
 </div>
 
-<div class="card">
-<h2>05. ANALYSIS RESULTS</h2>
-<div class="result">Pendapatan diiktiraf<strong id="incomeResult">RM0</strong></div>
-<div class="result">Komitmen sedia ada<strong id="commitResult">RM0</strong></div>
-<div class="result">DSR semasa<strong id="currentDSR">0%</strong></div>
-<div class="result">Baki kemampuan ansuran<strong id="capacity">RM0</strong></div>
-<div class="result">Anggaran jumlah pembiayaan<strong id="loanResult">RM0</strong></div>
-<div class="result">Anggaran ansuran bulanan<strong id="paymentResult">RM0</strong></div>
-<div class="result">DSR selepas pembiayaan<strong id="newDSR">0%</strong></div>
-<div class="result">Anggaran maksimum pembiayaan<strong id="maxLoan">RM0</strong></div>
-<div class="result">Anggaran harga hartanah maksimum<strong id="maxPrice">RM0</strong></div>
-<div class="result" id="status">Masukkan maklumat pelanggan.</div>
-<p class="note" id="extra"></p>
-</div>
-
-<div class="card">
-<h2>06. BANK COMPARISON</h2>
-<p class="note">Masukkan parameter yang telah disahkan daripada bank. Jangan anggap angka ini sebagai polisi rasmi bank.</p>
-<div class="grid">
-<div><label>Pilih bank</label>
-<select id="bank">
-<option>Maybank</option><option>CIMB Bank</option>
-<option>Public Bank</option><option>RHB Bank</option>
-<option>Hong Leong Bank</option><option>AmBank</option>
-<option>Bank Islam</option><option>Bank Rakyat</option>
-<option>BSN</option><option>MBSB Bank</option>
-</select></div>
-<div><label>Had DSR bank (%)</label><input id="bankDSR" type="number" value="70"></div>
-<div><label>Pengiktirafan pendapatan (%)</label><input id="bankIncome" type="number" value="100"></div>
-<div><label>Kadar bank (%)</label><input id="bankRate" type="number" step="0.01" value="4.2"></div>
-</div>
-<button onclick="compareBank()">ANALYSE BANK</button>
-<div id="bankResult" class="result">Belum dianalisis.</div>
-</div>
-
-<div class="card">
-<h2>07. CUSTOMER REPORT</h2>
-<button onclick="window.print()">PRINT / SAVE PDF</button>
-<p class="note">Analisis ini merupakan anggaran awal sahaja dan bukan jaminan kelulusan pinjaman.</p>
-</div>
 </main>
 
+<footer>
+MPIRE PROPERTIES | TRUST • VALUE • RESULTS<br>
+PROPERTY FINANCING ANALYSIS TOOL
+</footer>
+
 <script>
-const n=id=>Math.max(0,Number(document.getElementById(id).value)||0);
-const rm=x=>'RM'+Math.round(x).toLocaleString('en-MY');
-function pmt(p,r,y){
- if(!p||!y)return 0;
- let m=r/1200,k=y*12;
- return m===0?p/k:p*m/(1-Math.pow(1+m,-k));
+if(window.pdfjsLib){
+ pdfjsLib.GlobalWorkerOptions.workerSrc =
+ 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
-function maxPmt(a,r,y){
- if(!a||!y)return 0;
- let m=r/1200,k=y*12;
- return m===0?a*k:a*(1-Math.pow(1+m,-k))/m;
+
+const $ = id => document.getElementById(id);
+const money = n => 'RM' + (Number(n)||0).toLocaleString('en-MY',{maximumFractionDigits:0});
+
+function fileList(inputId, listId){
+ const input=$(inputId), list=$(listId);
+ input.addEventListener('change',()=>{
+  list.innerHTML='';
+  [...input.files].forEach((f,i)=>{
+   const row=document.createElement('div');
+   row.className='fileitem';
+   row.innerHTML='<span></span><button class="light" type="button">Remove</button>';
+   row.querySelector('span').textContent=f.name+' ('+(f.size/1024).toFixed(0)+' KB)';
+   row.querySelector('button').onclick=()=>{
+    const dt=new DataTransfer();
+    [...input.files].forEach((x,j)=>{if(j!==i)dt.items.add(x)});
+    input.files=dt.files;
+    input.dispatchEvent(new Event('change'));
+   };
+   list.appendChild(row);
+  });
+ });
 }
-function updateType(){
- let ref=document.getElementById('type').value==='refinance';
- document.getElementById('balanceField').style.display=ref?'block':'none';
- document.getElementById('costField').style.display=ref?'block':'none';
+fileList('payslips','paylist');
+fileList('statements','banklist');
+
+function setProgress(p,msg){
+ $('progressbar').style.width=p+'%';
+ $('progressText').textContent=msg;
+}
+
+async function ocrImage(file){
+ const worker=await Tesseract.createWorker('eng+msa',1,{
+  logger:m=>{
+   if(m.status==='recognizing text'){
+    setProgress(0, 'OCR sedang membaca imej: '+Math.round(m.progress*100)+'%');
+   }
+  }
+ });
+ try{
+  const result=await worker.recognize(file);
+  return result.data.text||'';
+ }finally{
+  await worker.terminate();
+ }
+}
+
+async function pdfText(file){
+ const buffer=await file.arrayBuffer();
+ const pdf=await pdfjsLib.getDocument({data:buffer}).promise;
+ let text='';
+ for(let p=1;p<=pdf.numPages;p++){
+  setProgress(0,'Membaca halaman PDF '+p+' daripada '+pdf.numPages);
+  const page=await pdf.getPage(p);
+  const content=await page.getTextContent();
+  let pageText=content.items.map(x=>x.str).join(' ');
+  if(pageText.trim().length<30){
+   const viewport=page.getViewport({scale:1.6});
+   const canvas=document.createElement('canvas');
+   canvas.width=viewport.width;
+   canvas.height=viewport.height;
+   await page.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
+   pageText+=(await ocrImage(canvas)).trim();
+  }
+  text+='\n--- PAGE '+p+' ---\n'+pageText;
+ }
+ return text;
+}
+
+async function readFile(file){
+ const ext=file.name.split('.').pop().toLowerCase();
+ if(ext==='pdf')return await pdfText(file);
+ if(['jpg','jpeg','png'].includes(ext))return await ocrImage(file);
+ throw new Error('Format tidak disokong: '+file.name);
+}
+
+function findAmounts(text, patterns){
+ for(const pattern of patterns){
+  const match=text.match(pattern);
+  if(match){
+   const n=Number(match[1].replace(/,/g,''));
+   if(Number.isFinite(n))return n;
+  }
+ }
+ return null;
+}
+
+function extractSuggestions(text){
+ const t=text.replace(/\s+/g,' ');
+ const salary=findAmounts(t,[
+  /(?:basic salary|gaji asas|basic pay|gaji pokok)\s*[:\-]?\s*RM?\s*([\d,]+\.\d{2}|[\d,]+)/i,
+  /(?:gross salary|gross pay|jumlah pendapatan|total earnings)\s*[:\-]?\s*RM?\s*([\d,]+\.\d{2}|[\d,]+)/i
+ ]);
+ const net=findAmounts(t,[
+  /(?:net salary|net pay|gaji bersih|take home pay|take-home pay)\s*[:\-]?\s*RM?\s*([\d,]+\.\d{2}|[\d,]+)/i
+ ]);
+ const deduction=findAmounts(t,[
+  /(?:total deductions|jumlah potongan|deductions)\s*[:\-]?\s*RM?\s*([\d,]+\.\d{2}|[\d,]+)/i
+ ]);
+ const commission=findAmounts(t,[
+  /(?:commission|komisen|incentive|insentif|allowance|elaun)\s*[:\-]?\s*RM?\s*([\d,]+\.\d{2}|[\d,]+)/i
+ ]);
+ return {salary,net,deduction,commission};
+}
+
+async function scanDocuments(){
+ const files=[...$('payslips').files].map(f=>({f,kind:'Slip gaji'}))
+ .concat([...$('statements').files].map(f=>({f,kind:'Bank statement'})));
+ if(!files.length){alert('Sila upload sekurang-kurangnya satu dokumen.');return}
+ $('scanBtn').disabled=true;
+ let allText='';
+ try{
+  for(let i=0;i<files.length;i++){
+   const item=files[i];
+   setProgress(Math.round(i/files.length*100),'Memproses '+item.f.name);
+   allText+='\n\n========== '+item.kind+': '+item.f.name+' ==========\n';
+   allText+=await readFile(item.f);
+  }
+  $('ocrText').value=allText;
+  const s=extractSuggestions(allText);
+  if(s.salary!==null)$('fixedIncome').value=s.salary;
+  if(s.commission!==null)$('variableIncome').value=s.commission;
+  if(s.deduction!==null)$('deductions').value=s.deduction;
+  if(s.net!==null)$('netIncome').value=s.net;
+  setProgress(100,'Selesai membaca dokumen.');
+  $('ocrStatus').textContent=
+   'Cadangan OCR: '+(s.salary===null?'Gaji asas tidak ditemui.':'Gaji asas ditemui.')+
+   ' '+(s.net===null?'Gaji bersih tidak ditemui.':'Gaji bersih ditemui.')+
+   ' Semak setiap angka dengan dokumen asal.';
+ }catch(e){
+  console.error(e);
+  setProgress(0,'Ralat semasa membaca dokumen.');
+  $('ocrStatus').textContent='Ralat: '+e.message+'. Cuba fail PDF atau imej yang lebih jelas.';
+ }finally{
+  $('scanBtn').disabled=false;
+ }
+}
+
+function num(id){return Math.max(0,Number($(id).value)||0)}
+function installment(principal,rate,months){
+ if(principal<=0||months<=0)return 0;
+ const r=rate/1200;
+ if(r===0)return principal/months;
+ return principal*r/(1-Math.pow(1+r,-months));
+}
+function principalFromPayment(payment,rate,months){
+ if(payment<=0||months<=0)return 0;
+ const r=rate/1200;
+ if(r===0)return payment*months;
+ return payment*(1-Math.pow(1+r,-months))/r;
 }
 function calculate(){
- let income=n('fixed')*n('fixedPct')/100+
- n('variable')*n('variablePct')/100;
- let commit=n('homeDebt')+n('carDebt')+n('personalDebt')+
- n('cardDebt')+n('ptptn')+n('otherDebt');
- let dsr=n('dsr'),capacity=Math.max(0,income*dsr/100-commit);
- let years=Math.min(n('years'),Math.max(0,n('endAge')-n('age')));
- let value=n('propertyValue'),margin=n('margin');
- let loan=value*margin/100;
- let rate=n('rate');
- let payment=pmt(loan,rate,years);
- let maxLoan=maxPmt(capacity,rate,years);
- let maxPrice=margin?maxLoan/(margin/100):0;
- let after=income?(commit+payment)/income*100:0;
- let ref=document.getElementById('type').value==='refinance';
- let cash=loan-n('balance')-n('cost');
- document.getElementById('incomeResult').textContent=rm(income);
- document.getElementById('commitResult').textContent=rm(commit);
- document.getElementById('currentDSR').textContent=(income?commit/income*100:0).toFixed(1)+'%';
- document.getElementById('capacity').textContent=rm(capacity);
- document.getElementById('loanResult').textContent=rm(loan);
- document.getElementById('paymentResult').textContent=rm(payment);
- document.getElementById('newDSR').textContent=after.toFixed(1)+'%';
- document.getElementById('maxLoan').textContent=rm(maxLoan);
- document.getElementById('maxPrice').textContent=rm(maxPrice);
- document.getElementById('status').textContent=income?(payment<=capacity?'ANSURAN DALAM HAD SIMULASI DSR':'ANSURAN MELEBIHI HAD SIMULASI DSR'):'SILA MASUKKAN PENDAPATAN';
- document.getElementById('extra').textContent=ref?
- 'Anggaran tunai kasar refinance selepas baki pinjaman dan kos: '+rm(cash):
- 'Anggaran deposit: '+rm(value-loan);
+ const income=num('fixedIncome')*num('fixedPct')/100+
+ num('variableIncome')*num('variablePct')/100;
+ const commitments=num('home')+num('car')+num('personal')+
+ num('card')+num('ptptn')+num('other');
+ const target=num('dsr')/100;
+ const current=income>0?commitments/income*100:0;
+ const capacity=Math.max(0,income*target-commitments);
+ const years=Math.min(num('tenure'),Math.max(0,num('endAge')-num('age')));
+ const months=years*12;
+ const maxLoan=principalFromPayment(capacity,num('rate'),months);
+ const margin=num('margin')/100;
+ const value=num('propertyValue');
+ const requested=value*margin;
+ const refinanceNet=Math.max(0,requested-num('balance')-num('cost'));
+ const loanType=$('loanType').value;
+ const finance=loanType==='Refinance'?Math.min(maxLoan,refinanceNet||maxLoan):Math.min(maxLoan,requested);
+ const payment=installment(finance,num('rate'),months);
+ const post=income>0?(commitments+payment)/income*100:0;
+ const maxPrice=margin>0?maxLoan/margin:0;
+
+ $('rIncome').textContent=money(income);
+ $('rCommit').textContent=money(commitments);
+ $('rDSR').textContent=current.toFixed(1)+'%';
+ $('rCapacity').textContent=money(capacity);
+ $('rFinance').textContent=money(finance);
+ $('rInstallment').textContent=money(payment);
+ $('rPostDSR').textContent=post.toFixed(1)+'%';
+ $('rMaxPrice').textContent=money(maxPrice);
+ $('resultNote').textContent=income<=0?
+ 'Pendapatan belum dimasukkan. Sila lengkapkan maklumat pendapatan.':
+ 'Simulasi awal berdasarkan andaian yang dimasukkan. Anggaran DSR selepas pembiayaan: '+
+ post.toFixed(1)+'%. Keputusan sebenar tertakluk kepada penilaian bank, dokumen sokongan, rekod kredit, polisi produk dan penilaian hartanah.';
 }
-function compareBank(){
- let income=n('fixed')*n('fixedPct')/100+
- n('variable')*n('variablePct')/100;
- let commit=n('homeDebt')+n('carDebt')+n('personalDebt')+
- n('cardDebt')+n('ptptn')+n('otherDebt');
- let bankIncome=income*n('bankIncome')/100;
- let capacity=Math.max(0,bankIncome*n('bankDSR')/100-commit);
- let years=Math.min(n('years'),Math.max(0,n('endAge')-n('age')));
- let max=maxPmt(capacity,n('bankRate'),years);
- let margin=n('margin');
- let maxPrice=margin?max/(margin/100):0;
- document.getElementById('bankResult').innerHTML=
- '<b>'+document.getElementById('bank').value+'</b><br>'+
- 'Pendapatan diiktiraf: '+rm(bankIncome)+'<br>'+
- 'Baki ansuran: '+rm(capacity)+'<br>'+
- 'Maksimum pembiayaan anggaran: '+rm(max)+'<br>'+
- 'Anggaran harga hartanah: '+rm(maxPrice);
+function clearAll(){
+ if(!confirm('Reset semua maklumat dan dokumen yang dipilih?'))return;
+ document.querySelectorAll('input').forEach(x=>{
+  if(x.type==='file')x.value='';
+  else if(x.type==='number')x.value=0;
+  else x.value='';
+ });
+ $('age').value=35;$('tenure').value=30;$('margin').value=90;
+ $('rate').value=4.2;$('fixedPct').value=100;
+ $('variablePct').value=70;$('dsr').value=70;$('endAge').value=70;
+ $('paylist').innerHTML='';$('banklist').innerHTML='';
+ $('ocrText').value='';$('ocrStatus').textContent='Belum ada analisis.';
+ setProgress(0,'Menunggu dokumen.');
+ calculate();
 }
+calculate();
 </script>
 </body>
 </html>
