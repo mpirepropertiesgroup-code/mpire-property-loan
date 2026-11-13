@@ -1,630 +1,73 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#17191d">
-<title>MPIRE PROPERTY LOAN ELIGIBILITY V3.0</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MPIRE Property Loan Eligibility V3.1</title>
 <style>
-:root{--red:#bd1e32;--red2:#95172a;--dark:#191b20;--bg:#f4f5f7;--white:#fff;--line:#e5e7eb;--muted:#737985;--green:#18834f;--amber:#a76b12}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#252830;font-family:Arial,Helvetica,sans-serif;font-size:14px}
-button,input,select{font:inherit}
-header{background:linear-gradient(120deg,#17191d,#292c32 72%,#85172a);color:#fff;border-bottom:4px solid var(--red);padding:25px 18px}
-.header-inner,.shell{max-width:1150px;margin:auto}
-.brand{font-size:11px;letter-spacing:4px;font-weight:800;color:#ddd}
-header h1{font-size:clamp(23px,3vw,32px);margin:9px 0 5px}
-header p{font-size:12px;color:#ddd;margin:0}
-.version{display:inline-block;margin-top:12px;border:1px solid #777;border-radius:5px;padding:5px 9px;font-size:10px;letter-spacing:1px}
-.shell{padding:0 15px 40px}
-.workflow{display:flex;gap:8px;margin:22px 0;align-items:center}
-.step{flex:1;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px;color:#737985;font-size:11px;font-weight:bold}
-.step b{width:27px;height:27px;border-radius:50%;background:#eee;display:grid;place-items:center;flex-shrink:0}
-.step.active{border-color:var(--red);color:var(--red);background:#fffafa}
-.step.active b,.step.done b{background:var(--red);color:white}
-.step.done{color:var(--green)}
-.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:22px;margin-bottom:16px;box-shadow:0 4px 18px #00000008}
-.panel h2{font-size:18px;margin:0 0 17px;padding-bottom:12px;border-bottom:1px solid var(--line);position:relative}
-.panel h2:after{content:"";position:absolute;bottom:-1px;left:0;width:45px;height:3px;background:var(--red)}
-.panel h3{font-size:14px;margin:0 0 13px}
-.page-heading{margin:22px 0 14px}
-.page-heading h2{font-size:21px;margin:0 0 4px}
-.page-heading p{color:var(--muted);font-size:12px;margin:0}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.field{min-width:0}
-.field label{display:block;font-size:11px;font-weight:bold;color:#555c67;margin-bottom:6px}
-.field input,.field select{width:100%;min-height:42px;border:1px solid #dfe2e7;border-radius:7px;padding:10px;background:#fafbfc;outline:none}
-.field input:focus,.field select:focus{border-color:var(--red);background:#fff;box-shadow:0 0 0 3px #bd1e3210}
-input[type=checkbox],input[type=radio]{accent-color:var(--red)}
-.small{font-size:11px;color:var(--muted);line-height:1.6}
-.notice{padding:13px 15px;border-radius:8px;background:#fff7e7;border:1px solid #f0dfbb;border-left:4px solid #d69a2e;color:#76551b;font-size:12px;line-height:1.65;margin:13px 0}
-.info{padding:13px 15px;background:#f4f6f9;border:1px solid var(--line);border-radius:8px;font-size:12px;line-height:1.6}
-.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.choice{border:1px solid var(--line);border-radius:10px;padding:17px;cursor:pointer;display:flex;gap:11px;align-items:flex-start}
-.choice:has(input:checked){border:2px solid var(--red);background:#fffafa;padding:16px}
-.choice strong{display:block;margin-bottom:5px}
-.choice input{margin-top:3px}
-.upload-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.upload-box{border:1px dashed #c5cbd4;border-radius:10px;padding:18px;background:#fafbfc}
-.upload-box label{font-weight:bold;display:block;margin-bottom:9px}
-.upload-box input{width:100%;font-size:11px}
-.file-list{font-size:11px;line-height:1.8;color:#555;margin-top:13px}
-.applicant{border:1px solid var(--line);border-radius:11px;padding:17px;margin:13px 0}
-.applicant h3{padding-bottom:11px;border-bottom:1px solid var(--line)}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
-.metric{background:#fafbfc;border:1px solid var(--line);border-radius:9px;padding:14px;position:relative;overflow:hidden}
-.metric:before{content:"";position:absolute;left:0;top:0;width:4px;height:100%;background:var(--red)}
-.metric span{font-size:10px;color:var(--muted);font-weight:bold;display:block}
-.metric strong{display:block;font-size:clamp(16px,2vw,22px);margin-top:7px;overflow-wrap:anywhere}
-.btn{border:0;border-radius:8px;padding:12px 17px;background:var(--red);color:white;font-size:12px;font-weight:bold;cursor:pointer}
-.btn:hover{background:var(--red2)}
-.btn.dark{background:var(--dark)}
-.btn.light{background:#eff0f2;color:#333;border:1px solid var(--line)}
-.btn.green{background:var(--green)}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
-.actions .btn.primary-action{padding:15px 22px;font-size:13px}
-.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
-table{width:100%;min-width:760px;border-collapse:collapse;font-size:12px}
-th{background:#202329;color:white;text-align:left;padding:13px 10px;white-space:nowrap}
-td{padding:12px 10px;border-bottom:1px solid var(--line)}
-tbody tr:hover td{background:#fff8f8}
-.good{color:var(--green);font-weight:bold}
-.bad{color:var(--red);font-weight:bold}
-.badge{display:inline-block;padding:4px 7px;border-radius:5px;font-size:10px;font-weight:bold;background:#eee;color:#555}
-.badge.green{background:#e6f5ed;color:#18794d}
-.badge.red{background:#fff0f1;color:#b21d31}
-.bank-card{border:1px solid var(--line);border-radius:10px;padding:16px;margin:13px 0}
-.bank-card h3{color:var(--red)}
-.hidden{display:none!important}
-footer{background:#17191d;color:#aeb4bd;text-align:center;padding:22px;font-size:11px;line-height:1.8;border-top:3px solid var(--red)}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){
- .shell{padding:0 10px 30px}
- .workflow{gap:5px}
- .step{padding:8px 5px;gap:5px;justify-content:center}
- .step span{font-size:9px}
- .step b{width:23px;height:23px;font-size:10px}
- .panel{padding:15px}
- .grid,.grid.two{grid-template-columns:1fr}
- .choice-grid,.upload-grid{grid-template-columns:1fr}
- .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
- .metric{padding:12px}
- .metric strong{font-size:17px}
- .actions .btn{flex:1 1 100%}
-}
-@media print{
- body{background:white;font-size:10px}
- header{print-color-adjust:exact;-webkit-print-color-adjust:exact}
- .no-print,button,.workflow{display:none!important}
- .shell{max-width:none;padding:0}
- .panel{box-shadow:none;break-inside:avoid}
- .table-wrap{overflow:visible}
- table{min-width:0;font-size:9px}
- th,td{padding:6px 4px}
-}
+:root{--r:#bd1e32;--d:#17191d;--m:#68707c;--l:#dfe3e8;--bg:#f4f5f7;--g:#147a48}*{box-sizing:border-box}body{margin:0;font:14px Arial;background:var(--bg);color:#252830}header{background:linear-gradient(120deg,#17191d,#292c32 70%,#85172a);border-bottom:4px solid var(--r);color:#fff;padding:25px 18px}.wrap,.shell{max-width:1180px;margin:auto}.shell{padding:0 16px 40px}.brand{font-size:11px;letter-spacing:4px;font-weight:bold;color:#ddd}h1{margin:8px 0 4px;font-size:clamp(24px,4vw,33px)}header p{margin:0;color:#ddd;font-size:12px}.steps{display:flex;gap:8px;margin:20px 0}.step{flex:1;background:#fff;border:1px solid var(--l);border-radius:9px;padding:11px;color:var(--m);font-size:11px;font-weight:bold}.step.active{border-color:var(--r);color:var(--r);background:#fff8f8}.panel{background:#fff;border:1px solid var(--l);box-shadow:0 3px 15px #00000008;border-radius:12px;padding:20px;margin:15px 0}.panel h2{font-size:18px;margin:0 0 15px;padding-bottom:10px;border-bottom:1px solid var(--l)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.field label,.upload label{display:block;font-size:11px;font-weight:bold;margin-bottom:6px;color:#525965}input,select,button{font:inherit}input,select{width:100%;min-height:40px;padding:9px;border:1px solid #d9dde3;border-radius:7px;background:#fbfcfd}input:focus,select:focus{outline:2px solid #bd1e3230;border-color:var(--r)}.upload{border:1px dashed #bfc6cf;border-radius:10px;padding:15px;background:#fafbfc}.small,.status{font-size:11px;color:var(--m);line-height:1.55}.notice{margin:13px 0;padding:12px 14px;border-radius:8px;background:#fff7e7;border:1px solid #f0dfbb;border-left:4px solid #d69a2e;line-height:1.55;font-size:12px}.privacy{background:#eff7f2;border-color:#cbe7d6;border-left-color:var(--g);color:#245f40}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:8px;padding:11px 16px;background:var(--r);color:white;font-weight:bold;cursor:pointer}.btn.light{background:#eff1f4;color:#252830;border:1px solid var(--l)}.btn.green{background:var(--g)}.btn:disabled{opacity:.55}.hidden{display:none!important}.applicant,.review-card{border:1px solid var(--l);border-radius:10px;padding:15px;margin:12px 0}.applicant h3{margin:0 0 12px;font-size:14px}.choice{display:inline-flex;align-items:center;gap:7px;margin-right:18px;font-weight:bold}.choice input{width:auto;min-height:auto}.doc-row{display:grid;grid-template-columns:1.2fr .7fr .8fr auto;gap:8px;align-items:center;border-bottom:1px solid var(--l);padding:9px 0;font-size:12px}.review-card{padding:10px}.candidate{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center}.pill{padding:3px 6px;border-radius:5px;background:#e6f5ed;color:#176e42;font-size:10px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.metric{border:1px solid var(--l);border-radius:8px;padding:13px;background:#fbfcfd}.metric span{display:block;font-size:10px;color:var(--m);font-weight:bold}.metric strong{display:block;margin-top:6px;font-size:20px}.table{overflow:auto;border:1px solid var(--l);border-radius:8px}table{width:100%;border-collapse:collapse;min-width:710px;font-size:12px}th{background:#202329;color:white;text-align:left;padding:11px}td{padding:10px;border-bottom:1px solid var(--l)}.good{color:var(--g);font-weight:bold}.bad{color:var(--r);font-weight:bold}@media(max-width:720px){.grid,.grid.two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.doc-row,.candidate{grid-template-columns:1fr}}@media print{.no-print,.steps,button{display:none!important}}
 </style>
 </head>
 <body>
+<header><div class="wrap"><div class="brand">MPIRE PROPERTIES</div><h1>PROPERTY LOAN ELIGIBILITY</h1><p>DOCUMENT REVIEW • JOINT LOAN • BANK MATCHING • REFINANCE</p></div></header>
+<main class="shell">
+<div class="steps no-print"><div class="step active" id="s1">1. DOCUMENTS</div><div class="step" id="s2">2. APPLICANTS</div><div class="step" id="s3">3. RESULTS</div></div>
 
-<header>
- <div class="header-inner">
-  <div class="brand">MPIRE PROPERTIES</div>
-  <h1>PROPERTY LOAN ELIGIBILITY</h1>
-  <p>LOAN ANALYSIS • JOINT LOAN • BANK MATCHING • REFINANCE</p>
-  <span class="version">TRUST • VALUE • RESULTS | VERSION 3.0</span>
- </div>
-</header>
-
-<div class="shell">
-
-<div class="workflow no-print">
- <div class="step active" id="step1"><b>1</b><span>DOCUMENTS</span></div>
- <div class="step" id="step2"><b>2</b><span>APPLICANTS</span></div>
- <div class="step" id="step3"><b>3</b><span>RESULTS</span></div>
-</div>
-
-<!-- STEP 1: DOCUMENTS -->
 <section id="screen1">
- <div class="page-heading">
-  <h2>01. Document Upload</h2>
-  <p>Muat naik dokumen pelanggan sebelum memulakan analisis kelayakan.</p>
- </div>
- <div class="panel">
-  <h2>Customer Documents</h2>
-  <div class="upload-grid">
-   <div class="upload-box">
-    <label>Payslip / Slip Gaji</label>
-    <input id="payslips" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple>
-    <p class="small">PDF, JPG atau PNG</p>
-   </div>
-   <div class="upload-box">
-    <label>Bank Statement</label>
-    <input id="statements" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple>
-    <p class="small">PDF, JPG atau PNG</p>
-   </div>
-   <div class="upload-box">
-    <label>EPF / KWSP Statement</label>
-    <input id="epf" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple>
-    <p class="small">Dokumen sokongan (pilihan)</p>
-   </div>
-   <div class="upload-box">
-    <label>Other Supporting Documents</label>
-    <input id="otherDocs" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple>
-    <p class="small">Dokumen tambahan (pilihan)</p>
-   </div>
-  </div>
-  <div class="file-list" id="fileList">Belum ada dokumen dipilih.</div>
-  <div class="actions no-print">
-   <button class="btn light" id="clearFiles">Clear Documents</button>
-  </div>
- </div>
- <div class="panel">
-  <h2>Customer Reference</h2>
-  <div class="grid">
-   <div class="field"><label>Nama pelanggan / Case Reference</label><input id="caseName" placeholder="Nama pelanggan"></div>
-   <div class="field"><label>No. telefon</label><input id="phone" placeholder="Nombor telefon"></div>
-   <div class="field"><label>Tarikh semakan</label><input id="checkDate" type="date"></div>
-  </div>
- </div>
- <div class="notice">
-  Dokumen hanya dipilih dalam sesi browser. Sistem tidak menghantar atau menyimpan fail ke server. Tiada OCR digunakan. Ejen perlu membaca dokumen dan mengisi angka kewangan secara manual pada langkah seterusnya.
- </div>
- <div class="actions no-print">
-  <button class="btn primary-action" onclick="goStep(2)">CONTINUE TO APPLICANTS →</button>
- </div>
-</section>
-
-<!-- STEP 2: APPLICANTS -->
-<section id="screen2" class="hidden">
- <div class="page-heading">
-  <h2>02. Applicant & Loan Information</h2>
-  <p>Pilih jenis permohonan, masukkan maklumat pemohon dan butiran hartanah.</p>
- </div>
-
- <div class="panel">
-  <h2>Loan Application Type</h2>
-  <div class="choice-grid">
-   <label class="choice">
-    <input type="radio" name="loanMode" value="single" checked>
-    <span><strong>Single Loan</strong><span class="small">Permohonan seorang pemohon sahaja.</span></span>
-   </label>
-   <label class="choice">
-    <input type="radio" name="loanMode" value="joint">
-    <span><strong>Joint Loan</strong><span class="small">Permohonan bersama sehingga empat pemohon.</span></span>
-   </label>
-  </div>
-  <div id="jointOptions" class="field hidden" style="margin-top:18px;max-width:350px">
-   <label>Bilangan pemohon</label>
-   <select id="applicantCount">
-    <option value="2">2 Pemohon</option>
-    <option value="3">3 Pemohon</option>
-    <option value="4">4 Pemohon</option>
-   </select>
-  </div>
- </div>
-
- <div class="panel">
-  <h2>Applicant Financial Details</h2>
-  <div id="applicantList"></div>
-  <p class="small">Masukkan amaun bulanan. Pendapatan dan komitmen akan digabungkan berdasarkan jumlah pemohon yang dipilih.</p>
- </div>
-
- <div class="panel">
-  <h2>Property & Loan Details</h2>
-  <div class="grid">
-   <div class="field"><label>Jenis permohonan</label>
-    <select id="loanType"><option value="purchase">Purchase</option><option value="refinance">Refinance</option></select>
-   </div>
-   <div class="field"><label>Jenis hartanah</label>
-    <select id="propertyType"><option>Residential</option><option>Commercial</option><option>Land</option><option>Industrial</option></select>
-   </div>
-   <div class="field"><label>Nilai pasaran hartanah (RM)</label><input id="marketValue" type="number" min="0" value="400000"></div>
-   <div class="field"><label>Harga belian (RM)</label><input id="purchasePrice" type="number" min="0" value="400000"></div>
-   <div class="field"><label>Margin pembiayaan diminta (%)</label><input id="requestedMargin" type="number" min="1" max="100" value="90"></div>
-   <div class="field"><label>Tempoh pinjaman (tahun)</label><input id="tenure" type="number" min="1" max="40" value="35"></div>
-   <div class="field"><label>Kadar faedah / keuntungan (%)</label><input id="interestRate" type="number" min="0" max="30" step=".01" value="4.2"></div>
-   <div class="field"><label>Umur pemohon tertua</label><input id="oldestAge" type="number" min="18" max="100" value="35"></div>
-   <div class="field"><label>Had umur tamat pembiayaan</label><input id="endAge" type="number" min="40" max="100" value="70"></div>
-  </div>
- </div>
-
- <div class="panel" id="refinancePanel">
-  <h2>Refinance Details</h2>
-  <div class="grid">
-   <div class="field"><label>Baki pinjaman sedia ada (RM)</label><input id="existingBalance" type="number" min="0" value="200000"></div>
-   <div class="field"><label>Kos guaman / kos lain (RM)</label><input id="refiCosts" type="number" min="0" value="10000"></div>
-   <div class="field"><label>Penyelesaian hutang lain (RM)</label><input id="settlement" type="number" min="0" value="0"></div>
-  </div>
- </div>
-
- <div class="panel">
-  <h2>Calculation Settings</h2>
-  <div class="grid two">
-   <div class="field"><label>DSR sasaran umum (%)</label><input id="targetDSR" type="number" min="1" max="100" value="70"></div>
-   <div class="field"><label>Kiraan komitmen kad kredit</label>
-    <select id="cardMethod"><option value="entered">Guna komitmen bulanan yang diisi</option><option value="five">Kira 5% daripada baki kad kredit yang diisi</option></select>
-   </div>
-  </div>
- </div>
-
- <div class="notice">
-  Semak semua angka sebelum membuat analisis. Jika ada pinjaman bersama, rekod komitmen tersebut sekali sahaja bagi mengelakkan pengiraan berganda.
- </div>
- <div class="actions no-print">
-  <button class="btn light" onclick="goStep(1)">← Back to Documents</button>
-  <button class="btn primary-action" onclick="analyse()">ANALYSE LOAN ELIGIBILITY →</button>
- </div>
-</section>
-
-<!-- STEP 3: RESULTS -->
-<section id="screen3" class="hidden">
- <div class="page-heading">
-  <h2>03. Loan Eligibility Results</h2>
-  <p>Keputusan analisis kewangan dan anggaran bank matching.</p>
- </div>
-
- <div class="panel">
-  <h2>Customer Summary</h2>
-  <div class="grid two">
-   <div><span class="small">CUSTOMER</span><br><strong id="resultCustomer">—</strong></div>
-   <div><span class="small">APPLICATION TYPE</span><br><strong id="resultType">—</strong></div>
-  </div>
- </div>
-
- <div class="panel">
-  <h2>Combined Financial Overview</h2>
-  <div class="metrics">
-   <div class="metric"><span>RECOGNISED INCOME</span><strong id="rIncome">RM0</strong></div>
-   <div class="metric"><span>TOTAL COMMITMENTS</span><strong id="rCommit">RM0</strong></div>
-   <div class="metric"><span>CURRENT DSR</span><strong id="rDSR">0%</strong></div>
-   <div class="metric"><span>MAX MONTHLY INSTALMENT</span><strong id="rInstallment">RM0</strong></div>
-  </div>
- </div>
-
- <div class="panel">
-  <h2>General Loan Eligibility</h2>
-  <div class="metrics">
-   <div class="metric"><span>MAXIMUM ESTIMATED LOAN</span><strong id="rLoan">RM0</strong></div>
-   <div class="metric"><span>PROPERTY VALUE</span><strong id="rProperty">RM0</strong></div>
-   <div class="metric"><span>LOAN TENURE</span><strong id="rTenure">0 years</strong></div>
-   <div class="metric"><span>REQUESTED MARGIN</span><strong id="rMargin">0%</strong></div>
-  </div>
-  <div class="info" id="generalNote" style="margin-top:14px"></div>
-  <div id="cashoutBox" class="notice hidden"></div>
- </div>
-
- <div class="panel">
-  <h2>Auto Bank Matching – 10 Banks</h2>
-  <p class="small">Perbandingan menggunakan parameter dalam Master Bank Policy. Semua nilai simulasi mesti disahkan dengan bank.</p>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>Rank</th><th>Bank</th><th>DSR Selepas Loan</th><th>Anggaran Ansuran</th><th>Max Facility</th><th>Cash-Out</th><th>Policy Status</th></tr></thead>
-    <tbody id="bankResults"><tr><td colspan="7">Belum dikira.</td></tr></tbody>
-   </table>
-  </div>
- </div>
-
- <div class="panel">
-  <h2>Recommendation</h2>
-  <div id="recommendation">—</div>
-  <div class="actions no-print">
-   <button class="btn" onclick="goStep(2)">Edit Applicant Details</button>
-   <button class="btn dark" onclick="window.print()">Print / Save PDF</button>
-   <button class="btn light" onclick="goStep(1)">New Customer</button>
-  </div>
- </div>
-</section>
-
-<!-- POLICY SETTINGS -->
-<section id="policyScreen" class="hidden">
- <div class="page-heading"><h2>Bank Policy Settings</h2><p>Pengurusan parameter perbandingan bank.</p></div>
- <div class="panel">
-  <div class="notice">Nilai asal ialah simulasi contoh dan BELUM DISAHKAN sebagai polisi rasmi bank. Status pengesahan ialah tanda semakan manual oleh pengguna, bukan pengesahan automatik.</div>
-  <div id="policyList"></div>
-  <div class="actions">
-   <button class="btn" id="savePolicies">Save Bank Policies</button>
-   <button class="btn light" id="resetPolicies">Reset Simulation Values</button>
-  </div>
-  <p class="small">Polisi disimpan pada browser/peranti ini sahaja menggunakan localStorage.</p>
- </div>
-</section>
-
-<footer>
- MPIRE PROPERTIES | TRUST • VALUE • RESULTS<br>
- PROPERTY LOAN ELIGIBILITY SYSTEM V3.0<br>
- Anggaran saringan awal sahaja. Bukan tawaran atau jaminan kelulusan pinjaman.
-</footer>
+<div class="panel"><h2>01. Customer Documents</h2>
+<div class="grid two">
+<div class="upload"><label>Upload customer documents</label><input id="files" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple><p class="small">PDF, JPG, PNG atau WEBP. Sistem terus baca fail selepas dipilih.</p></div>
+<div class="upload"><label>Automatic document processing</label><p class="small">PDF teks dibaca oleh PDF.js. Imej atau PDF scan menggunakan OCR. Semua proses berlaku dalam browser.</p><button id="process" class="btn">PROCESS AGAIN</button><p id="progress" class="status">Pilih fail untuk mula.</p></div>
+</div><div id="docList"></div>
+<div class="notice privacy"><b>Privacy:</b> Dokumen kekal pada browser/peranti ini dan tidak dihantar ke server atau GitHub.</div>
+<div class="notice"><b>Limitations:</b> OCR dan format bank statement boleh tersalah baca. Semak amaun sebelum guna. Polisi bank ialah simulasi dan perlu disahkan dengan bank.</div>
 </div>
+<div class="panel"><h2>Customer reference</h2><div class="grid"><div class="field"><label>Customer / case reference</label><input id="caseName"></div><div class="field"><label>Telephone</label><input id="phone"></div><div class="field"><label>Review date</label><input id="reviewDate" type="date"></div></div></div>
+<div class="panel"><h2>Extracted values — review before applying</h2><p class="small">Sistem baca automatik, tetapi anda perlu sahkan amaun sebelum ia masuk ke kiraan.</p><div id="review"><p class="small">Belum ada dokumen diproses.</p></div><div class="actions no-print"><button id="apply" class="btn green" disabled>APPLY CONFIRMED VALUES</button><button id="clear" class="btn light">CLEAR</button></div></div>
+<div class="actions no-print"><button class="btn" onclick="go(2)">CONTINUE TO APPLICANTS →</button></div>
+</section>
 
+<section id="screen2" class="hidden">
+<div class="panel"><h2>02. Application and applicants</h2><label class="choice"><input type="radio" name="mode" value="1" checked> Single loan</label><label class="choice"><input type="radio" name="mode" value="2"> Joint loan</label><select id="count" style="max-width:180px;display:none"><option value="2">2 applicants</option><option value="3">3 applicants</option><option value="4">4 applicants</option></select></div>
+<div class="panel"><h2>Applicant financial details</h2><div id="applicants"></div></div>
+<div class="panel"><h2>Property & loan details</h2><div class="grid">
+<div class="field"><label>Application type</label><select id="loanType"><option value="purchase">Purchase</option><option value="refinance">Refinance</option></select></div>
+<div class="field"><label>Property value (RM)</label><input id="value" type="number" value="400000"></div><div class="field"><label>Purchase price (RM)</label><input id="price" type="number" value="400000"></div>
+<div class="field"><label>Requested margin (%)</label><input id="margin" type="number" value="90"></div><div class="field"><label>Tenure (years)</label><input id="tenure" type="number" value="35"></div><div class="field"><label>Interest/profit rate (%)</label><input id="rate" type="number" step=".01" value="4.2"></div>
+<div class="field"><label>Existing balance</label><input id="balance" type="number" value="0"></div><div class="field"><label>Refinance costs</label><input id="costs" type="number" value="0"></div><div class="field"><label>Debt settlement</label><input id="settlement" type="number" value="0"></div>
+<div class="field"><label>Target DSR (%)</label><input id="dsr" type="number" value="70"></div><div class="field"><label>Credit-card treatment</label><select id="cardMethod"><option value="entered">Monthly payment</option><option value="five">5% card balance</option></select></div>
+</div></div>
+<div class="panel"><h2>Automatic bank matching</h2><p class="small">Sistem automatik bandingkan 10 bank menggunakan parameter simulasi terbina dalam. Sahkan polisi semasa dengan bank.</p></div>
+<div class="actions no-print"><button class="btn light" onclick="go(1)">← Documents</button><button id="analyse" class="btn">ANALYSE LOAN ELIGIBILITY →</button></div>
+</section>
+
+<section id="screen3" class="hidden">
+<div class="panel"><h2>03. Results</h2><div class="metrics"><div class="metric"><span>RECOGNISED INCOME</span><strong id="incomeOut">RM0</strong></div><div class="metric"><span>COMMITMENTS</span><strong id="commitOut">RM0</strong></div><div class="metric"><span>CURRENT DSR</span><strong id="currentOut">0%</strong></div><div class="metric"><span>MAX INSTALMENT</span><strong id="instOut">RM0</strong></div></div></div>
+<div class="panel"><h2>General eligibility</h2><div class="metrics"><div class="metric"><span>ESTIMATED MAX LOAN</span><strong id="loanOut">RM0</strong></div><div class="metric"><span>REQUESTED FACILITY</span><strong id="requestedOut">RM0</strong></div><div class="metric"><span>MONTHLY PAYMENT</span><strong id="paymentOut">RM0</strong></div><div class="metric"><span>REFINANCE CASH-OUT</span><strong id="cashOut">RM0</strong></div></div><p id="summary" class="notice"></p></div>
+<div class="panel"><h2>Automatic bank comparison</h2><div class="table"><table><thead><tr><th>Bank</th><th>Policy DSR</th><th>Max facility</th><th>After-loan DSR</th><th>Status</th></tr></thead><tbody id="bankRows"></tbody></table></div><div class="actions no-print"><button class="btn light" onclick="go(2)">EDIT</button><button class="btn" onclick="window.print()">PRINT / SAVE PDF</button></div></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
-"use strict";
-const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat("en-MY",{style:"currency",currency:"MYR",maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
-const v=id=>Math.max(0,Number($(id).value)||0);
-const clamp=(n,min,max)=>Math.min(max,Math.max(min,Number(n)||0));
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-function goStep(n){
- [1,2,3].forEach(i=>{
-  $("screen"+i).classList.toggle("hidden",i!==n);
-  const s=$("step"+i);
-  s.classList.toggle("active",i===n);
-  s.classList.toggle("done",i<n);
- });
- $("policyScreen").classList.add("hidden");
- window.scrollTo({top:0,behavior:"smooth"});
-}
-function showPolicies(){
- [1,2,3].forEach(i=>$("screen"+i).classList.add("hidden"));
- document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
- $("policyScreen").classList.remove("hidden");
- window.scrollTo({top:0,behavior:"smooth"});
-}
-const bankDefaults=[
- ["Maybank",70,100,70,80,90,4.3,70],
- ["CIMB Bank",70,100,70,80,90,4.4,70],
- ["Public Bank",70,100,60,80,90,4.2,70],
- ["RHB Bank",70,100,70,80,90,4.5,70],
- ["Hong Leong Bank",70,100,70,80,90,4.4,70],
- ["AmBank",70,100,70,80,90,4.5,70],
- ["Bank Islam",70,100,70,80,90,4.5,70],
- ["Bank Rakyat",70,100,60,80,90,4.6,70],
- ["BSN",70,100,70,80,90,4.5,70],
- ["MBSB Bank",70,100,70,80,90,4.7,70]
-].map(a=>({name:a[0],dsr:a[1],fixed:a[2],variable:a[3],rental:a[4],margin:a[5],rate:a[6],age:a[7],product:"Residential financing",source:"",updated:"",verified:false}));
-
-function loadPolicies(){
- try{
-  const p=JSON.parse(localStorage.getItem("mpireLoanV3Policies"));
-  if(Array.isArray(p)&&p.length===10)return p;
- }catch(e){}
- return bankDefaults.map(b=>({...b}));
-}
-let policies=loadPolicies();
-let applicants=[];
-function newApplicant(i){
- return {name:i===0?"Pemohon Utama":"Pemohon "+(i+1),age:35,
- salary:0,allowance:0,fixedPct:100,
- commission:0,variablePct:70,
- selfEmployed:0,selfPct:50,
- rental:0,rentalPct:80,
- home:0,car:0,personal:0,card:0,ptptn:0,other:0};
-}
-const applicantFields=[
- ["name","Nama pemohon","text"],
- ["age","Umur","number"],
- ["salary","Gaji pokok bulanan (RM)","number"],
- ["allowance","Elaun tetap bulanan (RM)","number"],
- ["fixedPct","Pengiktirafan pendapatan tetap (%)","number"],
- ["commission","Komisen / OT / variable (RM)","number"],
- ["variablePct","Pengiktirafan komisen (%)","number"],
- ["selfEmployed","Pendapatan bekerja sendiri (RM)","number"],
- ["selfPct","Pengiktirafan bekerja sendiri (%)","number"],
- ["rental","Pendapatan sewa bulanan (RM)","number"],
- ["rentalPct","Pengiktirafan pendapatan sewa (%)","number"],
- ["home","Komitmen rumah bulanan (RM)","number"],
- ["car","Komitmen kereta bulanan (RM)","number"],
- ["personal","Pinjaman peribadi (RM)","number"],
- ["card","Komitmen kad kredit / baki kad (RM)","number"],
- ["ptptn","PTPTN bulanan (RM)","number"],
- ["other","Komitmen lain bulanan (RM)","number"]
-];
-
-function selectedCount(){
- return document.querySelector('input[name="loanMode"]:checked').value==="single"?1:Number($("applicantCount").value);
-}
-function renderApplicants(){
- const count=selectedCount();
- $("applicantList").innerHTML=applicants.slice(0,count).map((a,i)=>`
- <div class="applicant">
-  <h3>${String(i+1).padStart(2,"0")} · ${i===0?"MAIN APPLICANT":"JOINT APPLICANT"}</h3>
-  <div class="grid">
-   ${applicantFields.map(([k,label,type])=>`
-    <div class="field"><label>${label}</label>
-     <input data-i="${i}" data-k="${k}" type="${type}" value="${esc(a[k])}" ${type==="number"?'min="0" step="any"':''}>
-    </div>`).join("")}
-  </div>
- </div>`).join("");
-
- $("applicantList").querySelectorAll("[data-k]").forEach(el=>{
-  const update=()=>{
-   const i=Number(el.dataset.i),k=el.dataset.k;
-   applicants[i][k]=el.type==="number"?Math.max(0,Number(el.value)||0):el.value;
-  };
-  el.addEventListener("input",update);
-  el.addEventListener("change",update);
- });
-}
-function income(a,b=null){
- const fp=b?b.fixed:a.fixedPct;
- const vp=b?b.variable:a.variablePct;
- const rp=b?b.rental:a.rentalPct;
- return (a.salary+a.allowance)*clamp(fp,0,100)/100+
- a.commission*clamp(vp,0,100)/100+
- a.selfEmployed*clamp(a.selfPct,0,100)/100+
- a.rental*clamp(rp,0,100)/100;
-}
-function commitment(a){
- const card=$("cardMethod").value==="five"?a.card*.05:a.card;
- return a.home+a.car+a.personal+card+a.ptptn+a.other;
-}
-function totals(bank=null){
- const list=applicants.slice(0,selectedCount());
- return {
-  income:list.reduce((s,a)=>s+income(a,bank),0),
-  commit:list.reduce((s,a)=>s+commitment(a),0),
-  count:list.length
- };
-}
-function payment(principal,rate,years){
- if(principal<=0||years<=0)return 0;
- const n=years*12,r=rate/1200;
- return r===0?principal/n:principal*r/(1-Math.pow(1+r,-n));
-}
-function loanFromPayment(pmt,rate,years){
- if(pmt<=0||years<=0)return 0;
- const n=years*12,r=rate/1200;
- return r===0?pmt*n:pmt*(1-Math.pow(1+r,-n))/r;
-}
-function analyse(){
- const count=selectedCount();
- applicants=applicants.slice(0,4);
- const t=totals();
- if(!applicants[0].name.trim()){alert("Sila masukkan nama pemohon utama.");return}
- if(t.income<=0){alert("Sila masukkan sekurang-kurangnya satu pendapatan pemohon.");return}
- if(v("marketValue")<=0){alert("Sila masukkan nilai pasaran hartanah.");return}
- if(v("tenure")<=0){alert("Sila masukkan tempoh pinjaman.");return}
-
- const target=clamp(v("targetDSR"),1,100);
- const oldest=v("oldestAge")||Math.max(...applicants.map(a=>a.age),35);
- const end=v("endAge")||70;
- const years=Math.max(0,Math.min(v("tenure"),end-oldest));
- const rate=v("interestRate");
- const market=v("marketValue"),price=v("purchasePrice");
- const margin=clamp(v("requestedMargin"),1,100);
- const refinance=$("loanType").value==="refinance";
- const base=refinance?market:price;
- const maxPmt=Math.max(0,t.income*target/100-t.commit);
- const maxByDSR=loanFromPayment(maxPmt,rate,years);
- const facility=Math.max(0,Math.min(maxByDSR,market*margin/100,base*margin/100));
- const cash=Math.max(0,facility-v("existingBalance")-v("refiCosts")-v("settlement"));
- const dsr=t.income?t.commit/t.income*100:0;
-
- $("resultCustomer").textContent=$("caseName").value||applicants[0].name;
- $("resultType").textContent=count===1?"Single Loan – 1 Applicant":"Joint Loan – "+count+" Applicants";
- $("rIncome").textContent=money(t.income);
- $("rCommit").textContent=money(t.commit);
- $("rDSR").textContent=dsr.toFixed(1)+"%";
- $("rInstallment").textContent=money(maxPmt);
- $("rLoan").textContent=money(facility);
- $("rProperty").textContent=money(market);
- $("rTenure").textContent=years+" years";
- $("rMargin").textContent=margin+"%";
- $("generalNote").textContent=`Pendapatan diiktiraf ${money(t.income)}. Komitmen ${money(t.commit)}. DSR semasa ${dsr.toFixed(1)}%. DSR sasaran ${target}%. Anggaran kemudahan umum ${money(facility)}.`;
- $("cashoutBox").classList.toggle("hidden",!refinance);
- $("cashoutBox").textContent=refinance?`Anggaran refinance cash-out: ${money(cash)}. Nilai ini selepas menolak baki pinjaman dan kos yang dimasukkan.`:"";
-
- const rows=policies.map(b=>{
-  const bt=totals(b);
-  const allowed=Math.max(0,bt.income*b.dsr/100-bt.commit);
-  const bankYears=Math.max(0,Math.min(v("tenure"),Number(b.age)-oldest));
-  const bankRate=Number(b.rate)||rate;
-  const byDSR=loanFromPayment(allowed,bankRate,bankYears);
-  const byMargin=market*clamp(b.margin,1,100)/100;
-  const bankFacility=Math.max(0,Math.min(byDSR,byMargin,base*clamp(b.margin,1,100)/100));
-  const instalment=payment(bankFacility,bankRate,bankYears);
-  const postDSR=bt.income?(bt.commit+instalment)/bt.income*100:0;
-  const bankCash=refinance?Math.max(0,bankFacility-v("existingBalance")-v("refiCosts")-v("settlement")):null;
-  return {...b,facility:bankFacility,instalment,postDSR,cash:bankCash};
- }).sort((a,b)=>b.facility-a.facility);
-
- $("bankResults").innerHTML=rows.map((b,i)=>`
- <tr>
-  <td>${i+1}</td>
-  <td><strong>${esc(b.name)}</strong><br><span class="small">${esc(b.product)}</span></td>
-  <td>${b.postDSR.toFixed(1)}%</td>
-  <td>${money(b.instalment)}</td>
-  <td><strong>${money(b.facility)}</strong></td>
-  <td>${refinance?money(b.cash):"—"}</td>
-  <td>${b.verified?'<span class="badge green">Manual Verified</span>':'<span class="badge red">Simulation</span>'}</td>
- </tr>`).join("");
-
- const best=rows[0];
- $("recommendation").innerHTML=best?`
- <div class="info">
-  <strong>Anggaran tertinggi dalam simulasi: ${esc(best.name)}</strong><br><br>
-  Anggaran kemudahan: <strong>${money(best.facility)}</strong><br>
-  Anggaran ansuran bulanan: <strong>${money(best.instalment)}</strong><br>
-  DSR selepas pembiayaan: <strong>${best.postDSR.toFixed(1)}%</strong><br>
-  ${refinance?"Anggaran cash-out: <strong>"+money(best.cash)+"</strong><br>":""}
-  Status parameter: ${best.verified?"Disahkan secara manual oleh pengguna":"Simulasi / belum disahkan"}
- </div>
- <p class="small">Kedudukan berdasarkan parameter yang dimasukkan. Ia bukan pre-approval, keputusan kredit atau jaminan kelulusan.</p>`:"Tiada keputusan.";
- goStep(3);
-}
-function renderPolicies(){
- $("policyList").innerHTML=policies.map((b,i)=>`
- <div class="bank-card">
-  <h3>${esc(b.name)}</h3>
-  <div class="grid">
-   ${policyField(i,"dsr","DSR maksimum simulasi (%)")}
-   ${policyField(i,"fixed","Pengiktirafan pendapatan tetap (%)")}
-   ${policyField(i,"variable","Pengiktirafan komisen (%)")}
-   ${policyField(i,"rental","Pengiktirafan sewa (%)")}
-   ${policyField(i,"margin","Margin pembiayaan (%)")}
-   ${policyField(i,"rate","Kadar simulasi (%)")}
-   ${policyField(i,"age","Had umur tamat pembiayaan")}
-   ${policyField(i,"product","Jenis produk","text")}
-   ${policyField(i,"updated","Tarikh kemas kini","date")}
-   ${policyField(i,"source","Sumber rujukan / URL","text")}
-  </div>
-  <label class="small"><input type="checkbox" data-verify="${i}" ${b.verified?"checked":""}> Saya telah menyemak polisi ini dengan sumber bank</label>
- </div>`).join("");
- $("policyList").querySelectorAll("[data-policy]").forEach(el=>{
-  el.addEventListener("input",()=>{
-   const i=Number(el.dataset.index),k=el.dataset.policy;
-   policies[i][k]=el.type==="number"?Math.max(0,Number(el.value)||0):el.value;
-  });
- });
- $("policyList").querySelectorAll("[data-verify]").forEach(el=>{
-  el.addEventListener("change",()=>policies[Number(el.dataset.verify)].verified=el.checked);
- });
-}
-function policyField(i,k,label,type="number"){
- return `<div class="field"><label>${label}</label><input data-index="${i}" data-policy="${k}" type="${type}" value="${esc(policies[i][k]??"")}" ${type==="number"?'min="0" step="any"':''}></div>`;
-}
-$("savePolicies").onclick=()=>{
- localStorage.setItem("mpireLoanV3Policies",JSON.stringify(policies));
- alert("Polisi berjaya disimpan pada browser ini.");
-};
-$("resetPolicies").onclick=()=>{
- if(!confirm("Reset semua polisi kepada nilai simulasi asal?"))return;
- policies=bankDefaults.map(b=>({...b}));
- renderPolicies();
- localStorage.setItem("mpireLoanV3Policies",JSON.stringify(policies));
-};
-document.querySelectorAll('input[name="loanMode"]').forEach(el=>{
- el.addEventListener("change",()=>{
-  const joint=el.checked&&el.value==="joint";
-  $("jointOptions").classList.toggle("hidden",!joint);
-  renderApplicants();
- });
-});
-$("applicantCount").addEventListener("change",renderApplicants);
-$("loanType").addEventListener("change",()=>{
- $("refinancePanel").classList.toggle("hidden",$("loanType").value!=="refinance");
-});
-
-let files=[];
-const fileTypes=["payslips","statements","epf","otherDocs"];
-function refreshFiles(){
- $("fileList").innerHTML=files.length?files.map((f,i)=>`${i+1}. ${esc(f.name)} (${Math.round(f.size/1024)} KB)`).join("<br>"):"Belum ada dokumen dipilih.";
-}
-fileTypes.forEach(id=>$(id).addEventListener("change",e=>{
- files.push(...Array.from(e.target.files));
- refreshFiles();
-}));
-$("clearFiles").onclick=()=>{
- files=[];
- fileTypes.forEach(id=>$(id).value="");
- refreshFiles();
-};
-$("checkDate").value=new Date().toISOString().slice(0,10);
-
-$("refinancePanel").classList.toggle("hidden",$("loanType").value!=="refinance");
-$("policyScreen").classList.add("hidden");
-applicants=[0,1,2,3].map(newApplicant);
-renderApplicants();
-renderPolicies();
-
-/* Admin policy access: click the system version label five times. */
-let policyClicks=0;
-document.querySelector(".version").addEventListener("click",()=>{
- policyClicks++;
- if(policyClicks>=5){policyClicks=0;showPolicies();}
-});
+const $=x=>document.getElementById(x),n=x=>Math.max(0,+$(x).value||0),money=x=>new Intl.NumberFormat("en-MY",{style:"currency",currency:"MYR",maximumFractionDigits:0}).format(x||0),esc=x=>String(x).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
+const banks=[["Maybank",4.3],["CIMB Bank",4.4],["Public Bank",4.2],["RHB Bank",4.5],["Hong Leong Bank",4.4],["AmBank",4.5],["Bank Islam",4.5],["Bank Rakyat",4.6],["BSN",4.5],["MBSB Bank",4.7]];
+let docs=[],sugs=[],apps=Array.from({length:4},(_,i)=>({name:i?"Pemohon "+(i+1):"Pemohon Utama",salary:0,allowance:0,commission:0,car:0,personal:0,card:0,ptptn:0,other:0}));
+const fields=[["name","Name","text"],["salary","Basic salary (RM)","number"],["allowance","Fixed allowance (RM)","number"],["commission","Commission / OT (RM)","number"],["car","Car commitment (RM)","number"],["personal","Personal loan (RM)","number"],["card","Card payment / balance (RM)","number"],["ptptn","PTPTN (RM)","number"],["other","Other commitment (RM)","number"]];
+function go(x){[1,2,3].forEach(i=>{$("screen"+i).classList.toggle("hidden",i!=x);$("s"+i).classList.toggle("active",i==x)});scrollTo(0,0)}
+function count(){return document.querySelector("[name=mode]:checked").value==="1"?1:+$("count").value}
+function renderApps(){$("applicants").innerHTML=apps.slice(0,count()).map((a,i)=>`<div class="applicant"><h3>${i?"Joint":"Main"} applicant ${i+1}</h3><div class="grid">${fields.map(([k,l,t])=>`<div class="field"><label>${l}</label><input type="${t}" min="0" data-i="${i}" data-k="${k}" value="${esc(a[k])}"></div>`).join("")}</div></div>`).join("");document.querySelectorAll("[data-i]").forEach(e=>e.oninput=()=>apps[e.dataset.i][e.dataset.k]=e.dataset.k==="name"?e.value:nv(e.value));}
+function nv(x){return Math.max(0,+x||0)}
+function renderDocs(){$("docList").innerHTML=docs.map((d,i)=>`<div class="doc-row"><span><b>${esc(d.file.name)}</b><br><span class="small">${Math.ceil(d.file.size/1024)} KB</span></span><label>Applicant <select data-d="${i}">${[0,1,2,3].map(x=>`<option value="${x}" ${x===d.app?"selected":""}>${x+1}</option>`).join("")}</select></label><span id="st${i}" class="status">${d.status||"Ready"}</span><button class="btn light" onclick="docs.splice(${i},1);renderDocs()">Remove</button></div>`).join("")||"<p class=small>No documents selected.</p>";document.querySelectorAll("[data-d]").forEach(e=>e.onchange=()=>docs[e.dataset.d].app=+e.value)}
+function add(field,label,value,file,page,app,conf){if(value>0&&conf>=.65)sugs.push({field,label,value,file,page,app,conf})}
+function extract(text,file,page,app){let t=text.replace(/\s+/g," "),f=[["salary","Basic salary",/(?:basic\s*(?:salary|pay)|gaji\s*asas)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.9],["allowance","Fixed allowance",/(?:fixed\s*allowance|elaun\s*tetap)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.82],["commission","Commission / OT",/(?:commission|komisen|overtime|\bOT\b)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.74],["car","Car instalment",/(?:car\s*(?:loan|instalment)|hire\s*purchase|ansuran\s*kereta)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.76],["personal","Personal loan",/(?:personal\s*loan|pinjaman\s*peribadi)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.76],["card","Credit card",/(?:credit\s*card|kad\s*kredit)\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.7],["ptptn","PTPTN",/\bPTPTN\b\D{0,35}(?:RM\s*)?([\d,]+(?:\.\d{1,2})?)/i,.76]];f.forEach(([k,l,r,c])=>{let m=t.match(r);if(m)add(k,l,+m[1].replace(/,/g,""),file,page,app,c)})}
+async function ocr(source,file,page,app){let w=await Tesseract.createWorker("eng");let r=await w.recognize(source);await w.terminate();extract(r.data.text,file,page,app)}
+async function process(){sugs=[];$("process").disabled=true;try{for(let i=0;i<docs.length;i++){let d=docs[i];$("progress").textContent="Reading "+d.file.name+" locally…";await ocr(d.file,d.file.name,1,d.app);d.status="Processed";let e=$("st"+i);if(e)e.textContent="Processed"}review();$("progress").textContent=`Done. ${sugs.length} value(s) found.`}catch(e){$("progress").textContent="OCR error: "+e.message}finally{$("process").disabled=false}}
+function review(){$("review").innerHTML=sugs.map((s,i)=>`<div class="review-card"><b>${esc(s.file)} · page ${s.page} · Applicant ${s.app+1}</b> <span class="pill">${Math.round(s.conf*100)}%</span><div class="candidate"><label class="choice"><input type="checkbox" data-u="${i}" checked> Use</label><span>${s.label}</span><input type="number" data-v="${i}" value="${s.value}"></div></div>`).join("")||"<p class=small>Tiada nilai jelas ditemui. Isi secara manual.</p>";$("apply").disabled=!sugs.length}
+function apply(){document.querySelectorAll("[data-u]").forEach(x=>{if(x.checked){let i=x.dataset.u,s=sugs[i];apps[s.app][s.field]=nv(document.querySelector(`[data-v="${i}"]`).value)}});renderApps();go(2)}
+function pay(p,r,y){r=r/1200;let z=y*12;return r?p*r/(1-(1+r)**-z):p/z}function loan(p,r,y){r=r/1200;let z=y*12;return r?p*(1-(1+r)**-z)/r:p*z}
+function analyse(){let a=apps.slice(0,count()),income=a.reduce((x,v)=>x+v.salary+v.allowance+v.commission*.7,0),commit=a.reduce((x,v)=>x+v.car+v.personal+($("cardMethod").value==="five"?v.card*.05:v.card)+v.ptptn+v.other,0),max=Math.max(0,income*n("dsr")/100-commit),maxLoan=loan(max,n("rate"),n("tenure")),wanted=($("loanType").value==="refinance"?n("value"):Math.min(n("value"),n("price")))*n("margin")/100,pm=pay(wanted,n("rate"),n("tenure")),cash=Math.max(0,wanted-n("balance")-n("costs")-n("settlement"));$("incomeOut").textContent=money(income);$("commitOut").textContent=money(commit);$("currentOut").textContent=(income?commit/income*100:0).toFixed(1)+"%";$("instOut").textContent=money(max);$("loanOut").textContent=money(maxLoan);$("requestedOut").textContent=money(wanted);$("paymentOut").textContent=money(pm);$("cashOut").textContent=money(cash);$("summary").textContent=maxLoan>=wanted?"Requested facility is within this simulation limit. Confirm all documents and bank policy.":"Requested facility exceeds this simulation limit. Review income, commitments, tenure or amount.";$("bankRows").innerHTML=banks.map(([b,r])=>{let lim=Math.min(loan(Math.max(0,income*.7-commit),r,n("tenure")),n("value")*.9),d=income?(commit+pay(wanted,r,n("tenure")))/income*100:0,ok=lim>=wanted&&d<=70;return`<tr><td>${b}</td><td>70%</td><td>${money(lim)}</td><td>${d.toFixed(1)}%</td><td class="${ok?"good":"bad"}">${ok?"Potential fit":"Review required"}</td></tr>`}).join("");go(3)}
+$("files").onchange=async e=>{docs.push(...[...e.target.files].map(file=>({file,app:0})));e.target.value="";renderDocs();await process()};$("process").onclick=process;$("apply").onclick=apply;$("clear").onclick=()=>{docs=[];sugs=[];renderDocs();review()};document.querySelectorAll("[name=mode]").forEach(e=>e.onchange=()=>{$("count").style.display=e.value==="2"?"inline-block":"none";renderApps()});$("count").onchange=renderApps;$("analyse").onclick=analyse;renderApps();renderDocs();
 </script>
 </body>
 </html>
